@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/category_meals_screen.dart';
 
 class CategoryItem extends StatelessWidget {
-  const CategoryItem(
-      {Key? key, required this.id, required this.title, required this.color})
-      : super(key: key);
+  const CategoryItem({
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.color,
+  }) : super(key: key);
 
   final String id;
   final String title;
