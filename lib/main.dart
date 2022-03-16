@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import './categories_screen.dart';
-import 'category_meals_screen.dart';
+import 'package:meals_app/screens/tabs_screen.dart';
+import 'screens/meal_detail_screen.dart';
+import 'screens/category_meals_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DeliMeals',
       theme: ThemeData(
+        primarySwatch: Colors.pink,
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.pink,
           accentColor: Colors.amber,
@@ -30,11 +34,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      home: const CategoriesScreen(),
+      home: const TabsScreen(),
       routes: {
-        CategoryMealsScreen.routeName: ((context) =>
-            const CategoryMealsScreen()),
+        CategoryMealsScreen.routeName: (context) => const CategoryMealsScreen(),
+        MealDetailScreen.routeName: (context) => const MealDetailScreen(),
       },
+      // onGenerateRoute: ,
+      // onUnknownRoute: ,
     );
   }
 }
