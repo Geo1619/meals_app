@@ -1,31 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:meals_app/dummy_data.dart';
 import 'package:meals_app/widgets/meal_item.dart';
 
-class CategoryMealsScreen extends StatelessWidget {
-  const CategoryMealsScreen({Key? key}) : super(key: key);
-  // const CategoryMealsScreen(
-  //     {Key? key, required this.categoryId, required this.categoryTitle})
-  //     : super(key: key);
+import '../models/meal.dart';
 
-  // final String categoryId;
-  // final String categoryTitle;
+class CategoryMealsScreen extends StatefulWidget {
+  const CategoryMealsScreen({Key? key, required this.availableMeals})
+      : super(key: key);
+
+  final List<Meal> availableMeals;
+
   static const routeName = '/category-meals';
 
   @override
+  State<CategoryMealsScreen> createState() => _CategoryMealsScreenState();
+}
+
+class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
+  late String categoryTitle;
+  late List<Meal> categoryMeals;
+  var _loadedInitData = false;
+
+  @override
+  void initState() {
+    // Cannot use BuildContext in here!. Too early. use didChangeDependencies() instead.
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_loadedInitData) {
+      final routeArgs =
+          ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+      categoryTitle = routeArgs['title'] ?? "";
+      final categoryId = routeArgs['id'];
+      categoryMeals = widget.availableMeals
+          .where(
+            (meal) => meal.categories.contains(categoryId),
+          )
+          .toList();
+      _loadedInitData = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  void removeMeal(String mealId) {
+    setState(() {
+      categoryMeals.removeWhere((e) => e.id == mealId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    final categoryTitle = routeArgs['title'];
-    final categoryId = routeArgs['id'];
-    final categoryMeals = DUMMY_MEALS
-        .where(
-          (element) => element.categories.contains(categoryId),
-        )
-        .toList();
     return Scaffold(
       appBar: AppBar(
-        title: Text(categoryTitle!),
+        title: Text(categoryTitle),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {

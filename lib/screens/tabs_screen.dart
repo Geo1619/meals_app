@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
+
+import '../models/meal.dart';
+import '../widgets/main_drawer.dart';
 import './categories_screen.dart';
 import './favorites_screen.dart';
 
 // There is also a top Tab Bar alternative (DefaultTabController)
 
 class TabsScreen extends StatefulWidget {
-  const TabsScreen({Key? key}) : super(key: key);
+  const TabsScreen({Key? key, required this.favoriteMeals}) : super(key: key);
+
+  final List<Meal> favoriteMeals;
 
   @override
   State<TabsScreen> createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Map<String, Object>> _pages = [
-    {'page': const CategoriesScreen(), 'title': 'Categories'},
-    {'page': const FavoritesScreen(), 'title': 'Favorites'},
-  ];
+  late List<Map<String, Object>> _pages;
+
+  @override
+  initState() {
+    _pages = [
+      {'page': const CategoriesScreen(), 'title': 'Categories'},
+      {
+        'page': FavoritesScreen(favoriteMeals: widget.favoriteMeals),
+        'title': 'Favorites'
+      },
+    ];
+    super.initState();
+  }
 
   int _selectedPageIndex = 0;
 
@@ -30,6 +44,7 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar:
           AppBar(title: Text(_pages[_selectedPageIndex]['title'] as String)),
+      drawer: const MainDrawer(),
       body: _pages[_selectedPageIndex]['page'] as Widget,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,

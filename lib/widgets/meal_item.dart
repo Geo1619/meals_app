@@ -11,6 +11,7 @@ class MealItem extends StatelessWidget {
     required this.complexity,
     required this.affordability,
     required this.id,
+    // required this.removeItem,
   }) : super(key: key);
 
   final String id;
@@ -50,7 +51,13 @@ class MealItem extends StatelessWidget {
     Navigator.of(ctx).pushNamed(
       MealDetailScreen.routeName,
       arguments: {'id': id},
-    );
+    )
+        //Returns a [Future] that completes to the result value passed to [pop] when the pushed route is popped off the navigator.
+        .then((value) {
+      if (value != null) {
+        // removeItem(value);
+      }
+    });
   }
 
   @override
